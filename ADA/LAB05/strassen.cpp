@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
-#include<stdlib.h>
-#include<time.h>
 using namespace std;
+
+unsigned h0, h1;
+unsigned t0, t1;
 
 int** generarMatriz(int rows, int cols){
     int** matriz = new int*[rows];
@@ -29,7 +30,7 @@ void imprimirMatriz(int **matriz, int rows, int cols){
     }
 }
 
-int** add(int** M1, int** M2, int rows, int cols) {
+int** suma(int** M1, int** M2, int rows, int cols) {
     int** temp = generarMatriz(rows, cols);
     for(int i = 0; i < rows; i++)
         for(int j = 0; j < cols; j++)
@@ -37,7 +38,7 @@ int** add(int** M1, int** M2, int rows, int cols) {
     return temp;
 }
 
-int** subtract(int** M1, int** M2, int rows, int cols) {
+int** resta(int** M1, int** M2, int rows, int cols) {
     int** temp = generarMatriz(rows, cols);
     for(int i = 0; i < rows; i++)
         for(int j = 0; j < cols; j++)
@@ -60,7 +61,7 @@ int** square_matrix_multiply(int **A, int **B, int rows, int cols){
 }
 
 
-int** strassenMultiply(int** A, int** B, int rows){
+int** strassen(int** A, int** B, int rows){
     if(rows == 1){
         int** C = generarMatriz(1,1);
         C[0][0] = A[0][0] * B[0][0];
@@ -79,7 +80,7 @@ int** strassenMultiply(int** A, int** B, int rows){
     int** B21 = generarMatriz(k, k);
     int** B22 = generarMatriz(k, k);
 
-    for(int i=0; i<k; i++)
+    for(int i=0; i<k; i++){
         for(int j=0; j<k; j++) {
             A11[i][j] = A[i][j];
             A12[i][j] = A[i][k+j];
@@ -90,19 +91,20 @@ int** strassenMultiply(int** A, int** B, int rows){
             B21[i][j] = B[k+i][j];
             B22[i][j] = B[k+i][k+j];
         }
+    }
 
-    int** P1 = strassenMultiply(A11, subtract(B12, B22, k, k), k);
-    int** P2 = strassenMultiply(add(A11, A12, k, k), B22, k);
-    int** P3 = strassenMultiply(add(A21, A22, k, k), B11, k);
-    int** P4 = strassenMultiply(A22, subtract(B21, B11, k, k), k);
-    int** P5 = strassenMultiply(add(A11, A22, k, k), add(B11, B22, k, k), k);
-    int** P6 = strassenMultiply(subtract(A12, A22, k, k), add(B21, B22, k, k), k);
-    int** P7 = strassenMultiply(subtract(A11, A21, k, k), add(B11, B12, k, k), k);
+    int** P1 = strassen(A11, resta(B12, B22, k, k), k);
+    int** P2 = strassen(suma(A11, A12, k, k), B22, k);
+    int** P3 = strassen(suma(A21, A22, k, k), B11, k);
+    int** P4 = strassen(A22, resta(B21, B11, k, k), k);
+    int** P5 = strassen(suma(A11, A22, k, k), suma(B11, B22, k, k), k);
+    int** P6 = strassen(resta(A12, A22, k, k), suma(B21, B22, k, k), k);
+    int** P7 = strassen(resta(A11, A21, k, k), suma(B11, B12, k, k), k);
 
-    int** C11 = subtract(add(add(P5, P4, k, k), P6, k, k), P2, k, k);
-    int** C12 = add(P1, P2, k, k);
-    int** C21 = add(P3, P4, k, k);
-    int** C22 = subtract(subtract(add(P5, P1, k, k), P3, k, k), P7, k, k);
+    int** C11 = resta(suma(suma(P5, P4, k, k), P6, k, k), P2, k, k);
+    int** C12 = suma(P1, P2, k, k);
+    int** C21 = suma(P3, P4, k, k);
+    int** C22 = resta(resta(suma(P5, P1, k, k), P3, k, k), P7, k, k);
 
     for(int i=0; i<k; i++)
         for(int j=0; j<k; j++) {
@@ -118,6 +120,7 @@ int** strassenMultiply(int** A, int** B, int rows){
 int main(){
     srand(time(NULL));
 
+    /*
     int n;
     cout << "Matrix size: "; cin>>n;
     int rows, cols;
@@ -130,21 +133,52 @@ int main(){
     llenarMatriz(B, rows, cols);
 
     cout << "Matriz A" << '\n';
-    imprimirMatriz(A, rows, cols);
+    //imprimirMatriz(A, rows, cols);
     cout << '\n';
 
     cout << "Matriz B" << '\n';
-    imprimirMatriz(B, rows, cols);
+    //imprimirMatriz(B, rows, cols);
     cout << '\n';
 
     cout << "Multiplicacion normal" << '\n';
     int** C = square_matrix_multiply(A, B, rows, cols);
-    imprimirMatriz(C, rows, cols);
+    //imprimirMatriz(C, rows, cols);
     cout << '\n';
 
     cout << "Strassen Method" << '\n';
-    int** D = strassenMultiply(A, B, rows);
-    imprimirMatriz(D, rows, cols);
+    t0 = clock();
+    int** D = strassen(A, B, rows);
+    t1 = clock();
+    //imprimirMatriz(D, rows, cols);
+
+
+    double time = (double(t1-t0)/CLOCKS_PER_SEC);
+    cout << time << '\n';
+    */
+   
+    cout << "Normal\tStrassen" << '\n';
+    for(int i = 1; i <= 8; i++){
+        int n = pow(2, i);
+        int** A = generarMatriz(n, n);
+        int** B = generarMatriz(n, n);
+
+        llenarMatriz(A, n, n);
+        llenarMatriz(B, n, n);
+
+        h0 = clock();
+        int** C = square_matrix_multiply(A, B, n, n);
+        h1 = clock();
+
+
+        t0 = clock();
+        int** D = strassen(A, B, n);
+        t1 = clock();
+
+        double time0 = (double(h1-h0)/CLOCKS_PER_SEC);
+        double time1 = (double(t1-t0)/CLOCKS_PER_SEC);
+        
+        cout << time0 << " - " << time1 << '\n';
+    }
 
     return 0;
 }
