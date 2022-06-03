@@ -1,4 +1,6 @@
 #include <bits/stdc++.h>
+#include<stdlib.h>
+#include<time.h>
 using namespace std;
 
 int** generarMatriz(int rows, int cols){
@@ -11,10 +13,9 @@ int** generarMatriz(int rows, int cols){
 }
 
 void llenarMatriz(int **matriz, int rows, int cols){
-    srand(time(NULL));
     for(int i=0;i<rows;i++){
         for(int j=0;j<cols;j++){
-            matriz[i][j]=rand()%99+1;
+            matriz[i][j]=1+rand()%(99);
         }
     }
 }
@@ -50,7 +51,7 @@ int** square_matrix_multiply(int **A, int **B, int rows, int cols){
     for(int i = 0; i < rows; i++){
         for(int j = 0; j < cols; j++){
             C[i][j] = 0;
-            for(int k = 1; k < rows; k++){
+            for(int k = 0; k < rows; k++){
                 C[i][j] += (A[i][k] * B[k][j]);
             }
         }
@@ -58,14 +59,15 @@ int** square_matrix_multiply(int **A, int **B, int rows, int cols){
     return C;
 }
 
-int** strassen(int** A, int** B, int rows, int cols){
+
+int** strassenMultiply(int** A, int** B, int rows){
     if(rows == 1){
-        int** C = generarMatriz(rows, cols);
+        int** C = generarMatriz(1,1);
         C[0][0] = A[0][0] * B[0][0];
         return C;
     }
 
-    int** C = generarMatriz(rows, cols);
+    int** C = generarMatriz(rows, rows);
     int k = rows/2;
 
     int** A11 = generarMatriz(k, k);
@@ -88,9 +90,34 @@ int** strassen(int** A, int** B, int rows, int cols){
             B21[i][j] = B[k+i][j];
             B22[i][j] = B[k+i][k+j];
         }
+
+    int** P1 = strassenMultiply(A11, subtract(B12, B22, k, k), k);
+    int** P2 = strassenMultiply(add(A11, A12, k, k), B22, k);
+    int** P3 = strassenMultiply(add(A21, A22, k, k), B11, k);
+    int** P4 = strassenMultiply(A22, subtract(B21, B11, k, k), k);
+    int** P5 = strassenMultiply(add(A11, A22, k, k), add(B11, B22, k, k), k);
+    int** P6 = strassenMultiply(subtract(A12, A22, k, k), add(B21, B22, k, k), k);
+    int** P7 = strassenMultiply(subtract(A11, A21, k, k), add(B11, B12, k, k), k);
+
+    int** C11 = subtract(add(add(P5, P4, k, k), P6, k, k), P2, k, k);
+    int** C12 = add(P1, P2, k, k);
+    int** C21 = add(P3, P4, k, k);
+    int** C22 = subtract(subtract(add(P5, P1, k, k), P3, k, k), P7, k, k);
+
+    for(int i=0; i<k; i++)
+        for(int j=0; j<k; j++) {
+            C[i][j] = C11[i][j];
+            C[i][j+k] = C12[i][j];
+            C[k+i][j] = C21[i][j];
+            C[k+i][k+j] = C22[i][j];
+        }
+    return C;
 }
 
-int main() {
+
+int main(){
+    srand(time(NULL));
+
     int n;
     cout << "Matrix size: "; cin>>n;
     int rows, cols;
@@ -102,13 +129,22 @@ int main() {
     llenarMatriz(A, rows, cols);
     llenarMatriz(B, rows, cols);
 
+    cout << "Matriz A" << '\n';
     imprimirMatriz(A, rows, cols);
     cout << '\n';
+
+    cout << "Matriz B" << '\n';
     imprimirMatriz(B, rows, cols);
     cout << '\n';
 
+    cout << "Multiplicacion normal" << '\n';
     int** C = square_matrix_multiply(A, B, rows, cols);
     imprimirMatriz(C, rows, cols);
+    cout << '\n';
+
+    cout << "Strassen Method" << '\n';
+    int** D = strassenMultiply(A, B, rows);
+    imprimirMatriz(D, rows, cols);
 
     return 0;
 }
