@@ -38,7 +38,7 @@ int partition(int arr[], int a, int b) {
 	} 
 	swap(&arr[i + 1], &arr[b]); 
 	return (i + 1); 
-} 
+}
 
 /*
 * Ejercicio 3
@@ -106,54 +106,11 @@ void quicksort(int arr[], int a, int b){
 
 }
 
-void insertionSort(int arr[], int a, int n){
-    for (int i = a + 1; i <= n; i++){
-        int value = arr[i];
-        int j = i;
- 
-        while (j > a && arr[j - 1] > value){
-            arr[j] = arr[j - 1];
-            j--;
-        }
-
-        arr[j] = value;
-    }
-}
-
-/*
-* Ejercicio 4
-*
-* Optimizar quicksort, insertando el algoritmo insertionSort para
-* arreglos de tamaño monores que 10
-*
-*/
-void quicksortOpimizado(int arr[], int a, int b){
-    while (a < b){
-        if (b - a < 10){
-            insertionSort(arr, a, b);
-            break;
-        }
-        else {
-            int pivot = partition(arr, a, b);
-
-            if (pivot - a < b - pivot){
-                quicksortOpimizado(arr, a, pivot - 1);
-                a = pivot + 1;
-            }
-            else {
-                quicksortOpimizado(arr, pivot + 1, b);
-                b = pivot - 1;
-            }
-        }
-    }
-}
-
-
 void imprimir(int arr[], int n) {
 	for (int i = 0; i < n; i++) 
 		cout << arr[i] << ' '; 
 	cout <<'\n'; 
-} 
+}
 
 int main() {
     srand(time(NULL));
@@ -162,10 +119,9 @@ int main() {
     //cout << "Size Vector: "; cin>>n;
 
     int arr[n];
-	int arr2[n];
 
     for(int i = 0; i < n; i++){
-        arr[i] = arr2[i] = 1 + rand() % 99;
+        arr[i] = 1 + rand() % 99;
     }
     
     cout << "Arreglo Original:" << '\n';
@@ -177,21 +133,15 @@ int main() {
 		t0 = clock();
 		quicksort(arr,0, n-1);
 		t1 = clock();
-
-		h0 = clock();
-		quicksortOpimizado(arr2,0, n-1);
-		h1 = clock();
 	}
 	
     cout << "Arreglo Ordenado:" << '\n';
     imprimir(arr, n);
     
     
-    double time = (double(t1-t0)/CLOCKS_PER_SEC);
-	double time2 = (double(h1-h0)/CLOCKS_PER_SEC);
+    double time0 = (double(t1-t0)/CLOCKS_PER_SEC);
     
-    cout << "Time Normal: " << time << '\n';
-	cout << "Time Optimizado: " << time2 << '\n';
+    cout << "Time Normal: " << time0 << '\n';
 
     return 0;
 } 
