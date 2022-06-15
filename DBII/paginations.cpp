@@ -44,36 +44,51 @@ void metodo_lru(){
             imprimir(pagAlojadas);
         }
 
-        // pagina a reemplazar(nuevo)
+        // pagina a reemplazar(nuevo) *no esta*
         else{
             int k;
-            int maxIndex = INT_MAX;
+            int maxIndex = INT_MAX; // Indice las antiguo
             int remplazarPag = 0;
-            int flag = 0;
+            int flag = 0; // Para ver si hay alguna coincidencia
             for (int j = 0; j < pagAlojadas.size(); j++){
                 flag = 0;
+                
+                // Busca el elemento mas antiguo comparando la cadena desde el actual
+                // disminuyendo uno en uno
                 for (k = i - 1; k >= 0; k--){
-                    if (paginas[k] != pagAlojadas[j])
+                    
+                    //cout << '\n';
+                    //cout << "I-J-k: " << i << "-" << j << "-" << k << '\n';
+                    //cout << "paginas[k]-pagAlojadas[j]: " << paginas[k] << "-" << pagAlojadas[j] << '\n';
+                    if (paginas[k] != pagAlojadas[j]){
+                        //cout << "estoy dentro" << '\n';
                         continue;
+                    }
+                        
                     else{
                         flag = 1;
                         if (k < maxIndex){
                             maxIndex = k;
                             remplazarPag = j;
+                            //cout << "J ---> " << j << '\n';
                         }
                         break;
                     }
                 }
-
+                //cout << "Valor de J-I-K: [" << j << "-" << i << "-" << k << "]" <<'\n';
+                // reemplazo nueva pagina
+                /*
                 if (flag == 0){
                     pagAlojadas[j] = paginas[i];
                     contFallos++;
-                    cout << paginas[i] << " M    ";
+                    cout << paginas[i] << " *    ";
+                    
                     imprimir(pagAlojadas);
                     break;
                 }
+                */
             }
-            if (flag == 1){
+            if (flag == 1){ // ya esta en memoria
                 pagAlojadas[remplazarPag] = paginas[i];
                 contFallos++;
                 cout << paginas[i] << " M    ";

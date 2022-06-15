@@ -1,19 +1,16 @@
------------------MRU-----------------
+-----------------LRU-----------------
 -------------------------------------
 Pag.   Cont. de Frames
 ----   ---------------
-A M 	A       
-B M 	A B     
-D M 	A B D   
-D     	A B D   
-E M 	A B D E 
-A     	A B D E 
-E     	A B D E 
-C M 	A B D C 
-A     	A B D C 
-B     	A B D C 
-C     	A B D C 
-A     	A B D C 
-E M 	E B D C 
+C M    C
+A M    C A
+D M    C A D
+B M    C A D B
+E M    E A D B
+B      E A D B
+A      E A D B
+B      E A D B
+C M    E A C B
+D M    D A C B
 -------------------------------------
-Numero de fallos de pagina = 6
+Numero de fallos de pagina = 7
