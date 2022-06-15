@@ -155,6 +155,72 @@ void metodo_clock(){
     cout << "Numero de fallos de pagina = " << contFallos << '\n';
 }
 
+int find_vector(vector<string> vec, string val){
+    int cont = 0;
+    for(int i = 0; i < vec.size(); i++){
+        if(vec[i] == val)
+            return cont;
+        cont++;
+    }
+    return -1;
+}
+
+void metodo_mru(){
+    string input;
+    vector<string> paginas;
+    vector<string> proceso;
+    int contFallos = 0;
+
+    for(int i = 0; i < cantPaginas; i++) proceso.push_back(" "); // inicializa el proceso vacio
+
+    while(cin>>input){
+        paginas.push_back(input);
+    }
+
+    cout << "-----------------MRU-----------------" << '\n';
+    cout << "-------------------------------------" << '\n';
+    cout << "Pag.   Cont. de Frames" << '\n';
+    cout << "----   ---------------" << '\n';
+
+    int posPagina, posVacio, posInsercion;
+
+    for(int i = 0; i < paginas.size(); i++){
+        posPagina = find_vector(proceso, paginas[i]); // busca la posicion de la entrada actual en el proceso
+
+        // IMPRESION PAG. ------------------
+        cout << paginas[i] << " ";
+
+        if ( posPagina >= 0) // si la encuentra
+            cout << "    " << "\t";
+        else{ // si no la encuentra, es Missed
+            cout << "M " << "\t";
+            contFallos++;
+        }
+
+        // IMPRESION CONT. DE FRAMES --------
+        if ( posPagina < 0){ // si no la encuentra en el proceso
+            posVacio = find_vector(proceso, " "); // busca si hay un espacio vacio en el proceso para insertar una pagina
+
+            if(posVacio >= 0){ // si se ha encontrado una posicion vacia
+            
+                proceso[posVacio] = paginas[i];
+            }
+            else{ // si no hay espacios vacios
+            
+                // MRU !
+                posInsercion = find_vector(proceso, paginas[i-1]); // busca posicion donde insertar en el proceso
+                proceso[posInsercion] = paginas[i];
+            }
+        }
+        for(int i = 0; i < proceso.size(); i++)
+            cout << proceso[i] << " ";
+        cout << endl;
+    }
+
+    cout << "-------------------------------------" << '\n';
+    cout << "Numero de fallos de pagina = " << contFallos << '\n';
+}
+
 int main(){    
     cin >> cantPaginas;
     string method;
@@ -163,8 +229,8 @@ int main(){
     
     if (method == "LRU")
         metodo_lru();
-    //else if (method == "MRU")
-        //mru();
+    else if (method == "MRU")
+        metodo_mru();
     else if (method == "CLOCK")
         metodo_clock();
     
