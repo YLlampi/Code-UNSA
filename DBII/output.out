@@ -1,0 +1,30 @@
+-----------------LRU-----------------
+-------------------------------------
+Pag.   Cont. de Frames
+----   ---------------
+T M    T
+H M    T H
+I M    T H I
+S M    T H I S
+I      T H I S
+S      T H I S
+A M    A H I S
+R M    A R I S
+E M    A R E S
+A      A R E S
+L M    A R E L
+L      A R E L
+Y M    A Y E L
+L      A Y E L
+O M    A Y O L
+N M    N Y O L
+G M    N G O L
+P M    N G O P
+A M    N G A P
+T M    T G A P
+T      T G A P
+E M    T E A P
+R M    T E A R
+N M    T E N R
+-------------------------------------
+Numero de fallos de pagina = 18
