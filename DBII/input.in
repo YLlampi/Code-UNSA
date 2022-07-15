@@ -1,3 +1,4 @@
-4
-LRU
-C A D B E B A B C D
+3
+MRU
+01 02 03 04 05 06 07
+

@@ -1,52 +1,53 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void solve(int a, int b, int c){
-    int minimo;
-    int maximo;
-    if(a < b){
-        minimo = a;
-        maximo = b;
-    }
-    else{
-        minimo = b;
-        maximo = a;
+void solve(int m, int n, int t){
+    int i, first, second;
+    int time[1000];
+    int burgers[1000];
+
+    time[0] = 0;
+    burgers[0] = 0;
+
+    for (i = 1; i <= t; i++){
+        time[i] = 0;
+        burgers[i] = 0;
+
+        if (i >= m)
+            first = time[i - m] + m;
+        else
+            first = -1;
+        if (i >= n)
+            second = time[i - n] + n;
+        else
+            second = -1;
+
+        if (first > time[i] && first > second){
+            time[i] = first;
+            burgers[i] = burgers[i - m] + 1;
+        }
+        else if (second > time[i] && second > first){
+            time[i] = second;
+            burgers[i] = burgers[i - n] + 1;
+        }
+        else if (first > time[i] && first == second){
+            time[i] = first;
+            burgers[i] = max(burgers[i - m], burgers[i - n]) + 1;
+        }
     }
 
-    if(c % minimo == 0){
-        cout << c/minimo << '\n';
-        return;
-    }
-
-    int cont = 1;
-    int sum = minimo;
-
-    while(sum < c){
-        sum += minimo;
-        cont++;
-    }
-    if(sum != c){
-        sum -= minimo;
-        cont--;
-        do{
-            
-        }while(sum < c);
-    }
-    else if(sum == c){
-        cout << cont << '\n';
-        return;
-    }
-
-
-
+    if (time[t] == t) cout << burgers[t] << '\n';
+    else cout << burgers[t] << t - time[t] << '\n';
 }
 
 int main(){
-    int a,b,c;
-    while(cin>>a>>b>>c){
-        solve(a,b,c);
+    int m, n, t;
+    
+    while (cin>>n>>n>>t){
+        solve(m, n, t);
     }
-
-
+        
+    
+    
     return 0;
 }
