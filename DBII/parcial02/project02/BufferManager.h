@@ -38,7 +38,8 @@ public:
             //paginas.push_back(input2);
         //}
 
-
+        // valores aleatorios
+        //variable = limite_inferior + rand() % (limite_superior +1 - limite_inferior) ;
         int index = 7 + rand() % 20; // Numeros de paginas a Consultar (pueden ser Repetidos)
         for(int i = 0; i < index; i++){
             int index_a = 0 + rand() % (this->data_files.size()-1 + 1 - 0);
