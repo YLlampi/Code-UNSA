@@ -17,6 +17,10 @@ public:
         this->contador_id = 0;
     }
 
+    void clearScreen() {
+        printf("\033[2J\033[1;1H");
+    }
+
     void insertarDato(Hash& h, vector<string>& colums){
         vector<string> pas(colums.size());
         for(int i = 0; i < colums.size(); i++){
@@ -56,11 +60,13 @@ public:
 
             if(opcion__menu == 1){
                 insertarDato(h, colums);
+                clearScreen();
             }
             else if(opcion__menu == 2){
                 int id__eliminar;
                 cout << "Id a Eliminar: "; cin>>id__eliminar;
                 h.deleteItem(id__eliminar);
+                clearScreen();
             }
             else if(opcion__menu == 3){
                 h.displayHash();

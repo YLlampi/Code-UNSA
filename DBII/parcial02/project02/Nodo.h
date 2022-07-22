@@ -14,7 +14,7 @@ class Nodo{
         }
 
         void toString() const {
-            cout << this->id << "-";
+            cout << this->id << '\t';
             for(auto i : val){
                 cout << i << "\t";
             }

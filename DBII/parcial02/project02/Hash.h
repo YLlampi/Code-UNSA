@@ -39,6 +39,7 @@ void Hash::insertItem(Nodo* key){
 }
 
 void Hash::deleteItem(int key){
+    this->all_data[key] = -1;
     int index = hashFunction(key);
 
 
@@ -58,7 +59,7 @@ void Hash::displayHash(){
     }
     cout << '\n';
     for(int i = 0; i < BUCKET; i++){
-        cout << i << ": ";
+        //cout << i << ": ";
         for(auto x : table[i]){
             x->toString();
             //this->all_data.push_back(x->getId());

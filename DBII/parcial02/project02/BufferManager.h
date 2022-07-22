@@ -44,6 +44,7 @@ public:
         for(int i = 0; i < index; i++){
             int index_a = 0 + rand() % (this->data_files.size()-1 + 1 - 0);
             //paginas[i] = to_string(this->data_files[index]);
+            if(this->data_files[index_a] == -1) continue;
             paginas.push_back(to_string(this->data_files[index_a]));
         }
         
