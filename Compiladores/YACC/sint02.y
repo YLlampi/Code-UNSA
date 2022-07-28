@@ -12,7 +12,7 @@
 %}
 %token ID /* no utilizado */
 %%
- S: 'x' S;
+ S: 'x' { printf(" token x \n"); } S ;
  S: A B 'c';
  A: 'a' ;
  B: 'b' ;
@@ -26,4 +26,18 @@ yylex() /* analizador léxico */
  if (isalpha(c))
  return c;
  yyerror("caracter ilegal");
+}
+
+yyerror(char *m) /* función de yacc para error */
+{
+ printf("%s",m);
+ exit(0);
+}
+main()
+{
+
+ while(1)
+ {
+ yyparse(); /* analizador sintáctico */
+ }
 }

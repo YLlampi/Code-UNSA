@@ -1,15 +1,12 @@
------------------MRU-----------------
+----------------CLOCK----------------
 -------------------------------------
 Pag.   Cont. de Frames
 ----   ---------------
-C M 	C     
-D M 	C D   
-A M 	C D A 
-B M 	C D B 
-C     	C D B 
-D     	C D B 
-E M 	C E B 
-A M 	C A B 
-B     	C A B 
+A M    A
+B M    A B
+C M    A B C
+A      A B C
+B      A B C
+A      A B C
 -------------------------------------
-Numero de fallos de pagina = 6
+Numero de fallos de pagina = 3
