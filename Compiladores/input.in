@@ -1,6 +1,0 @@
-+ main() {
-    int temp1;
-    char c;
-    temp1=5;
-}
-
