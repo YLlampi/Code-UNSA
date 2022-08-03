@@ -5,6 +5,7 @@ class BufferManager{
 private:
     int cantPaginas;
     vector<int> data_files;
+    
         
 public:
     //BufferManager() {

@@ -3,8 +3,8 @@
 class Hash{
     int BUCKET;
 
-    list<Nodo*> *table;
-    vector<string> vals;
+    list<Nodo*> *table; // cada nodo es un registro
+    vector<string> vals; // cabeceras
 
     vector<int> all_data;
 
@@ -54,6 +54,9 @@ void Hash::deleteItem(int key){
 }
 
 void Hash::displayHash(){
+
+    cout << "id" << '\t';
+
     for(auto i : vals){
         cout << i << "\t";
     }
