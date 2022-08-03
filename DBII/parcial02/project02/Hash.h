@@ -20,7 +20,7 @@ public:
     }
 
     vector<int>& getData() {
-        return this->all_data;
+        //return this->all_data;
     }
 
     void displayHash();

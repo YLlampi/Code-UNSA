@@ -55,7 +55,8 @@ public:
             cout << "2. Eliminar Dato" << '\n';
             cout << "3. Mostrar Tabla" << '\n';
             cout << "4. Buffer Manager(Consultas)" << '\n';
-            cout << "5. Salir" << '\n';
+            cout << "5. (Consultas)" << '\n';
+            cout << "6. Salir" << '\n';
             cout << "Seleccione una opcion: "; cin>>opcion__menu;
 
             if(opcion__menu == 1){
@@ -75,6 +76,10 @@ public:
                 bm = new BufferManager(this->cantPaginas, h.getData());
             }
 
-        }while(opcion__menu != 5);
+            else if(opcion__menu == 5){
+                bm = new BufferManager(this->cantPaginas, h.getData());
+            }
+
+        }while(opcion__menu != 6);
     }
 };
