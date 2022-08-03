@@ -66,16 +66,17 @@
 
 
 /* First part of user prologue.  */
-#line 43 "hola.y"
+#line 2 "hola2.y"
 
 #include <stdio.h>
 #include <ctype.h>
 #include <math.h>
+#define H 257
+#define O 258
+#define L 259
+#define A 260
 
-int yylex();
-int yyerror();
-
-#line 79 "y.tab.c"
+#line 80 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -507,7 +508,7 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    56,    56,    57,    57
+       0,    13,    13,    14,    14
 };
 #endif
 
@@ -1292,13 +1293,13 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 56 "hola.y"
-                        {printf("La expresión introducida es parte del lenguaje reconocido\n");}
-#line 1298 "y.tab.c"
+#line 13 "hola2.y"
+                    {printf("La expresión introducida es parte del lenguaje reconocido\n");}
+#line 1299 "y.tab.c"
     break;
 
 
-#line 1302 "y.tab.c"
+#line 1303 "y.tab.c"
 
       default: break;
     }
@@ -1530,31 +1531,29 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 59 "hola.y"
+#line 15 "hola2.y"
 
-
-int yylex() 
+int yylex()
 {
-    char carac = getchar();
-    switch(carac) {
-    case 'H':
-    case 'h': return H;
-    case 'O':
-    case 'o': return O;
-    case 'L':
-    case 'l': return L;
-    case 'A':
-    case 'a': return A;
-    }
-    return -1;
+ char carac=getchar();
+ switch(carac) {
+case 'H':
+case 'h': return H;
+case 'O':
+case 'o': return O;
+case 'L':
+case 'l': return L;
+case 'A':
+case 'a': return A;
+ }
+ return -1;
 }
 int yyerror() {
-    printf("La expresión de la entrada NO forma parte del lenguaje reconocido\n");
-    return 0;
+ printf("La expresión de la entrada NO forma parte del lenguaje reconocido\n");
+ return 0;
 }
-
-
-int main() {
-    yyparse();
-    return 0;
+int main()
+{
+ yyparse();
+ return 0;
 }

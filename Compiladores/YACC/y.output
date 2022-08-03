@@ -1,0 +1,99 @@
+Grammar
+
+    0 $accept: hola $end
+
+    1 hola: H letra_o L A
+
+    2 letra_o: O
+    3        | letra_o O
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    H (258) 1
+    O (259) 2 3
+    L (260) 1
+    A (261) 1
+
+
+Nonterminals, with rules where they appear
+
+    $accept (7)
+        on left: 0
+    hola (8)
+        on left: 1
+        on right: 0
+    letra_o (9)
+        on left: 2 3
+        on right: 1 3
+
+
+State 0
+
+    0 $accept: . hola $end
+
+    H  shift, and go to state 1
+
+    hola  go to state 2
+
+
+State 1
+
+    1 hola: H . letra_o L A
+
+    O  shift, and go to state 3
+
+    letra_o  go to state 4
+
+
+State 2
+
+    0 $accept: hola . $end
+
+    $end  shift, and go to state 5
+
+
+State 3
+
+    2 letra_o: O .
+
+    $default  reduce using rule 2 (letra_o)
+
+
+State 4
+
+    1 hola: H letra_o . L A
+    3 letra_o: letra_o . O
+
+    O  shift, and go to state 6
+    L  shift, and go to state 7
+
+
+State 5
+
+    0 $accept: hola $end .
+
+    $default  accept
+
+
+State 6
+
+    3 letra_o: letra_o O .
+
+    $default  reduce using rule 3 (letra_o)
+
+
+State 7
+
+    1 hola: H letra_o L . A
+
+    A  shift, and go to state 8
+
+
+State 8
+
+    1 hola: H letra_o L A .
+
+    $default  reduce using rule 1 (hola)
