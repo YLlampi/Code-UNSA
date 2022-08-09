@@ -42,6 +42,8 @@ class Game{
             }
         }
 
+        // trabajar con tablero, matriz
+
         void bfs(int v){
             queue <int> Q;
             Q.push(v);
