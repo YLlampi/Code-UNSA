@@ -1,103 +1,301 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class Game{
-    private:
-        int n; // Tamaño de la matriz
-        vector <vector <char>> table; // tablero
+#define MAXtamTablero 25
+#define MAXnumMinas 99
+#define MOVESIZE 526 // (25 * 25 - 99)
 
-        vector <bool> visited;
-        vector <vector <int>> graph;
+int tamTablero;
+int numMinas;
 
-    public:
-        Game(int n) : n{n}{
-            vector <vector <char>> tableTemp(n, vector<char>(n, 45)); // 45 ASCII => -
-            this->table.assign(tableTemp.begin(), tableTemp.end());
-            generarTablero();
-        }
+bool isValid(int row, int col)
+{
+    return (row >= 0) && (row < tamTablero) &&
+           (col >= 0) && (col < tamTablero);
+}
 
-        void mainController(){
-            int a,b;
-            bool band = true;
-            do{
-                cout << "Posicion [X][Y]: "; cin>>a>>b;
-                a--;
-                b--;
-                if(this->table[a][b] != 42){
-                    
-                }
-                else {
-                    cout << "Game Over" << '\n';
-                    band = false;
-                }
-            }while(band);
+bool isMine(int row, int col, char board[][MAXtamTablero])
+{
+    if (board[row][col] == '*')
+        return (true);
+    else
+        return (false);
+}
 
-        }
+void makeMove(int *x, int *y)
+{
+    printf("Ingrese posicion, (x, y) -> ");
+    
+    scanf("%d %d", x, y);
+    printf("\033[2J\033[1;1H");
+    (*x)--;
+    (*y)--;
+    return;
+}
 
-        void generarTablero() {
-            for(int i = 0; i < n; i++){
-                int numAleatorioI = 0 + rand() % (n);
-                int numAleatorioJ = 0 + rand() % (n);
-                this->table[numAleatorioI][numAleatorioJ] = 42; // 42 ASCII => * | Minas
+void printBoard(char myBoard[][MAXtamTablero])
+{
+    int i, j;
+
+    for (i = 0; i < tamTablero; i++)
+    {
+        for (j = 0; j < tamTablero; j++)
+            printf("%c ", myBoard[i][j]);
+        printf("\n");
+    }
+    return;
+}
+
+int countAdjacentMines(int row, int col, int mines[][2],
+                       char realBoard[][MAXtamTablero])
+{
+
+    int i;
+    int count = 0;
+
+    if (isValid(row - 1, col) == true)
+    {
+        if (isMine(row - 1, col, realBoard) == true)
+            count++;
+    }
+
+    if (isValid(row + 1, col) == true)
+    {
+        if (isMine(row + 1, col, realBoard) == true)
+            count++;
+    }
+
+    if (isValid(row, col + 1) == true)
+    {
+        if (isMine(row, col + 1, realBoard) == true)
+            count++;
+    }
+
+    if (isValid(row, col - 1) == true)
+    {
+        if (isMine(row, col - 1, realBoard) == true)
+            count++;
+    }
+
+    if (isValid(row - 1, col + 1) == true)
+    {
+        if (isMine(row - 1, col + 1, realBoard) == true)
+            count++;
+    }
+
+    if (isValid(row - 1, col - 1) == true)
+    {
+        if (isMine(row - 1, col - 1, realBoard) == true)
+            count++;
+    }
+
+    if (isValid(row + 1, col + 1) == true)
+    {
+        if (isMine(row + 1, col + 1, realBoard) == true)
+            count++;
+    }
+
+    if (isValid(row + 1, col - 1) == true)
+    {
+        if (isMine(row + 1, col - 1, realBoard) == true)
+            count++;
+    }
+
+    return (count);
+}
+
+bool jugarBuscaminasUtil(char myBoard[][MAXtamTablero], char realBoard[][MAXtamTablero],
+                         int mines[][2], int row, int col, int *movesLeft)
+{
+    if (myBoard[row][col] != '-')
+        return (false);
+
+    int i, j;
+    if (realBoard[row][col] == '*')
+    {
+        myBoard[row][col] = '*';
+
+        for (i = 0; i < numMinas; i++)
+            myBoard[mines[i][0]][mines[i][1]] = '*';
+
+        printBoard(myBoard);
+        printf("\nPerdiste!\n");
+        return (true);
+    }
+
+    else
+    {
+        int count = countAdjacentMines(row, col, mines, realBoard);
+        (*movesLeft)--;
+
+        myBoard[row][col] = count + '0';
+
+        if (!count)
+        {
+            if (isValid(row - 1, col) == true)
+            {
+                if (isMine(row - 1, col, realBoard) == false)
+                    jugarBuscaminasUtil(myBoard, realBoard, mines, row - 1, col, movesLeft);
+            }
+
+            if (isValid(row + 1, col) == true)
+            {
+                if (isMine(row + 1, col, realBoard) == false)
+                    jugarBuscaminasUtil(myBoard, realBoard, mines, row + 1, col, movesLeft);
+            }
+
+            if (isValid(row, col + 1) == true)
+            {
+                if (isMine(row, col + 1, realBoard) == false)
+                    jugarBuscaminasUtil(myBoard, realBoard, mines, row, col + 1, movesLeft);
+            }
+
+            if (isValid(row, col - 1) == true)
+            {
+                if (isMine(row, col - 1, realBoard) == false)
+                    jugarBuscaminasUtil(myBoard, realBoard, mines, row, col - 1, movesLeft);
+            }
+
+            if (isValid(row - 1, col + 1) == true)
+            {
+                if (isMine(row - 1, col + 1, realBoard) == false)
+                    jugarBuscaminasUtil(myBoard, realBoard, mines, row - 1, col + 1, movesLeft);
+            }
+
+            if (isValid(row - 1, col - 1) == true)
+            {
+                if (isMine(row - 1, col - 1, realBoard) == false)
+                    jugarBuscaminasUtil(myBoard, realBoard, mines, row - 1, col - 1, movesLeft);
+            }
+
+            if (isValid(row + 1, col + 1) == true)
+            {
+                if (isMine(row + 1, col + 1, realBoard) == false)
+                    jugarBuscaminasUtil(myBoard, realBoard, mines, row + 1, col + 1, movesLeft);
+            }
+
+            if (isValid(row + 1, col - 1) == true)
+            {
+                if (isMine(row + 1, col - 1, realBoard) == false)
+                    jugarBuscaminasUtil(myBoard, realBoard, mines, row + 1, col - 1, movesLeft);
             }
         }
 
-        // trabajar con tablero, matriz
+        return (false);
+    }
+}
 
-        void bfs(int v){
-            queue <int> Q;
-            Q.push(v);
+void placeMines(int mines[][2], char realBoard[][MAXtamTablero])
+{
+    bool mark[MAXtamTablero * MAXtamTablero];
 
-            while (not Q.empty()){ //mientras nuestra lista tenga nodos
-                int u = Q.front(); //seleccionamos el primer nodo de la lista
-                Q.pop(); //y lo eliminamos
+    memset(mark, false, sizeof(mark));
 
-                if (not visited[u]){ //si no lo hemos visitado
-                    visited[u] = true;
+    for (int i = 0; i < numMinas;)
+    {
+        int random = rand() % (tamTablero * tamTablero);
+        int x = random / tamTablero;
+        int y = random % tamTablero;
 
-                    for (int i = 0; i < graph[u].size(); ++i){
-                        int w = graph[u][i];
+        if (mark[random] == false)
+        {
+            mines[i][0] = x;
+            mines[i][1] = y;
 
-                        Q.push(w); //ponemos a sus vecinos en la lista
-                    }
-                }
+            realBoard[mines[i][0]][mines[i][1]] = '*';
+            mark[random] = true;
+            i++;
+        }
+    }
+
+    return;
+}
+
+void initialise(char realBoard[][MAXtamTablero], char myBoard[][MAXtamTablero])
+{
+    srand(time(NULL));
+
+    for (int i = 0; i < tamTablero; i++)
+    {
+        for (int j = 0; j < tamTablero; j++)
+        {
+            myBoard[i][j] = realBoard[i][j] = '-';
+        }
+    }
+
+    return;
+}
+
+void cheatMinesweeper(char realBoard[][MAXtamTablero])
+{
+    printf("The mines locations are-\n");
+    printBoard(realBoard);
+    return;
+}
+
+void replaceMine(int row, int col, char board[][MAXtamTablero])
+{
+    for (int i = 0; i < tamTablero; i++)
+    {
+        for (int j = 0; j < tamTablero; j++)
+        {
+            if (board[i][j] != '*')
+            {
+                board[i][j] = '*';
+                board[row][col] = '-';
+                return;
             }
         }
+    }
+    return;
+}
 
-        void generateScript(){
-            cout << '\n';
-            cout << '+';
-            for(int i = 0; i < n*2 -1; i++){
-                cout << '-';
-            }
-            cout << '+';
-            cout << '\n';
+void jugarBuscaminas()
+{
+    bool gameOver = false;
+
+    char realBoard[MAXtamTablero][MAXtamTablero], myBoard[MAXtamTablero][MAXtamTablero];
+
+    int movesLeft = tamTablero * tamTablero - numMinas, x, y;
+    int mines[MAXnumMinas][2];
+
+    initialise(realBoard, myBoard);
+
+    placeMines(mines, realBoard);
+
+    int currentMoveIndex = 0;
+    while (gameOver == false)
+    {
+        printf("Estado actual del tablero: \n");
+        printBoard(myBoard);
+        makeMove(&x, &y);
+
+        if (currentMoveIndex == 0)
+        {
+            if (isMine(x, y, realBoard) == true)
+                replaceMine(x, y, realBoard);
         }
 
-        void printTable() {
-            generateScript();
-            for(int i = 0; i < n; i++){
-                cout << '|';
-                for(int j = 0; j < n; j++){
-                    cout << this->table[i][j] << '|';
-                }
-                generateScript();
-            }
+        currentMoveIndex++;
+
+        gameOver = jugarBuscaminasUtil(myBoard, realBoard, mines, x, y, &movesLeft);
+
+        if ((gameOver == false) && (movesLeft == 0))
+        {
+            printf("\nGanaste..!\n");
+            gameOver = true;
         }
+    }
+    return;
+}
 
-};
+int main()
+{
 
-int main(){
-    srand(time(nullptr));
+    tamTablero = 16;
+    numMinas = 40;
 
-    int n;
-    cout << "Size of Table: "; cin>>n;
+    jugarBuscaminas();
 
-    Game myGame(n);
-
-    myGame.printTable();
-
-    //myGame.mainController();
-
-    return 0;
+    return (0);
 }

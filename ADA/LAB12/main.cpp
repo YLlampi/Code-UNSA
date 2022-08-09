@@ -1,75 +1,62 @@
-#include <iostream>
-#include <algorithm>
-#include <cstdio>
-#include <cstring>
-#include <cmath>
-#include <queue>
+#include <bits/stdc++.h>
 using namespace std;
 
-const int N = 15;
-const int dx[] = {0, 0, 1, 1, 1, -1, -1, -1};//up down down
-const int dy[] = {1, -1, -1, 0, 1, -1, 0, 1};
-char map[N][N];
-int n;
-struct Node
-{
-    int x, y;
-    Node() {}
-    Node(int a, int b){
-        x = a;
-        y = b;
-    }
-};
+#define vi vector<int>
+#define vvi vector<vector<int>>
+#define pii pair<int,int>
+#define vvpii vector<vector<pair<int,int>>>
+#define vli vector<list<int>>
 
-void bfs(int x, int y)
-{
-    queue<Node> q;
-    q.push(Node(x, y));
-    while(!q.empty()){
-        Node tmp = q.front(), tmp1;
-        if(map[tmp.x][tmp.y] == '0')
-        for(int i = 0 ; i < 8; i ++){
-            tmp1.x = tmp.x + dx[i]; tmp1.y = tmp.y + dy[i];
-            if(tmp1.x < 1 || tmp1.x > n || tmp1.y < 1 || tmp1.y > n || map[tmp1.x][tmp1.y] == '@') continue;
-            q.push(tmp1);
+void print(vvi& graph) {
+
+    for(int i = 1; i < graph.size(); i++){
+        cout << i << " -> ";
+        for(int j = 0; j < graph[i].size(); j++){
+            cout << graph[i][j] << ' ';
         }
-        map[tmp.x][tmp.y] = '@';
-        q.pop();
+        cout << '\n';
     }
-    return ;
 }
-int main()
-{
-    int T, k = 1;
-    cin >> T;
-    while(T --){
-        cin >> n;
-        getchar();
-        for(int i = 1; i <= n; i ++){
-            for(int j  = 1; j <= n; j ++){
-                scanf("%c", &map[i][j]);
-            }
-            getchar();
-        }
-        int ans = 0;
-        for(int i = 1; i <= n; i ++){
-            for(int j = 1; j <= n; j ++){
-                if(map[i][j] == '0'){
-                    bfs(i, j);
-                    ans ++;
-                }
 
+void bfs(vvi& graph, int v){
+    vector<bool> visited(graph.size()+1, false);
+    queue <int> Q;
+    Q.push(v);
+
+    while (not Q.empty()){ //mientras nuestra lista tenga nodos
+        int u = Q.front(); //seleccionamos el primer nodo de la lista
+        Q.pop(); //y lo eliminamos
+
+        if (not visited[u]){ //si no lo hemos visitado
+            visited[u] = true;
+            cout << u << ' ';
+            for (int i = 0; i < graph[u].size(); ++i){
+                int w = graph[u][i];
+
+                Q.push(w); //ponemos a sus vecinos en la lista
             }
         }
-        for(int i = 1; i <= n; i ++){
-            for(int j = 1; j <= n; j ++){
-                if(map[i][j] != '@'){
-                    ans ++;
-                }
-            }
-        }
-        cout << "Case " << k ++ << ": ";
-        cout << ans << endl;
     }
+}
+
+int main(){
+    int n, m; cin>>n>>m;
+    vvi graph(n+1);
+    
+    for(int i{0}; i < m; i++){
+        int a,b; cin>>a>>b;
+        graph[a].push_back(b);
+        graph[b].push_back(a);
+    }
+
+    print(graph);
+
+    cout << '\n';
+    
+    bfs(graph, 3);
+
+
+
+
     return 0;
 }
