@@ -225,7 +225,8 @@ Node *BPTree::findParent(Node *cursor, Node *child) {
 void BPTree::display(Node *cursor) {
   if (cursor != NULL) {
     for (int i = 0; i < cursor->size; i++) {
-      cout << cursor->key[i] << " ";
+      
+      if(cursor->IS_LEAF) cout << cursor->key[i] << " ";
     }
     cout << "\n";
     if (cursor->IS_LEAF != true) {
